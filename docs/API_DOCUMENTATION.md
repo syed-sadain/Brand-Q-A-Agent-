@@ -6,7 +6,8 @@ Complete reference for the Brand Q&A Agent HTTP API.
 - **Interactive docs:** [`/docs`](http://localhost:8000/docs) (Swagger UI), [`/redoc`](http://localhost:8000/redoc) (ReDoc)
 - **OpenAPI schema:** [`/openapi.json`](http://localhost:8000/openapi.json)
 - **Content type:** `application/json`
-- **Correlation:** every response includes an `X-Request-ID` header.
+- **Diagnostics:** every response includes an `X-Request-ID` correlation header and a
+  `Server-Timing` header with server-side application processing time in milliseconds.
 
 All three endpoints are defined in `app/api/v1/` and mounted (with no version prefix) by
 `app/api/router.py`.

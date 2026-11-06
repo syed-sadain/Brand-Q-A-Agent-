@@ -44,6 +44,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             request_id_ctx.reset(token)
         duration_ms = (time.perf_counter() - started) * 1000
         response.headers[_REQUEST_ID_HEADER] = request_id
+        response.headers["Server-Timing"] = f"app;dur={duration_ms:.2f}"
         logger.info(
             "request completed",
             extra={

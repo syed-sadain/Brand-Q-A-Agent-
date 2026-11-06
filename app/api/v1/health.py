@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
 import time
+from collections.abc import Awaitable, Callable
 
 from fastapi import APIRouter, Depends
 
@@ -53,6 +55,15 @@ async def _check_llm(llm: BaseLLM) -> ComponentHealth:
     )
 
 
+async def _check_dependency(
+    check: Callable[[], Awaitable[ComponentHealth]], provider: str
+) -> ComponentHealth:
+    try:
+        return await check()
+    except AppError as exc:
+        return ComponentHealth(status="unavailable", provider=provider, detail=exc.message)
+
+
 @router.get(
     "/health",
     response_model=HealthResponse,
@@ -66,28 +77,22 @@ async def _check_llm(llm: BaseLLM) -> ComponentHealth:
 async def health_check(container: Container = Depends(get_container_dep)) -> HealthResponse:
     """Report the reachability of the service's critical dependencies."""
     settings = container.settings
-    components: dict[str, ComponentHealth] = {}
-
-    try:
-        components["vector_store"] = await _check_vector_store(container.vector_store())
-    except AppError as exc:
-        components["vector_store"] = ComponentHealth(
-            status="unavailable", provider=settings.vector_store_provider, detail=exc.message
-        )
-
-    try:
-        components["embeddings"] = await _check_embeddings(container.embeddings())
-    except AppError as exc:
-        components["embeddings"] = ComponentHealth(
-            status="unavailable", provider=settings.embedding_provider, detail=exc.message
-        )
-
-    try:
-        components["llm"] = await _check_llm(container.llm())
-    except AppError as exc:
-        components["llm"] = ComponentHealth(
-            status="unavailable", provider=settings.llm_provider, detail=exc.message
-        )
+    vector_store, embeddings, llm = await asyncio.gather(
+        _check_dependency(
+            lambda: _check_vector_store(container.vector_store()),
+            settings.vector_store_provider,
+        ),
+        _check_dependency(
+            lambda: _check_embeddings(container.embeddings()),
+            settings.embedding_provider,
+        ),
+        _check_dependency(lambda: _check_llm(container.llm()), settings.llm_provider),
+    )
+    components = {
+        "vector_store": vector_store,
+        "embeddings": embeddings,
+        "llm": llm,
+    }
 
     overall: ComponentStatus
     if components["vector_store"].status == "unavailable":
