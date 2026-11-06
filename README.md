@@ -1,6 +1,12 @@
 # Brand Q&A Agent
 
 [![CI](https://github.com/syed-sadain/Brand-Q-A-Agent-/actions/workflows/ci.yml/badge.svg)](https://github.com/syed-sadain/Brand-Q-A-Agent-/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Async_API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agent_Workflows-1C3C3C)](https://www.langchain.com/langgraph)
+[![Pinecone](https://img.shields.io/badge/Pinecone-Vector_Database-000000)](https://www.pinecone.io/)
+[![Docker Compose](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A multi-tenant **Brand Q&A** backend: a Retrieval-Augmented Generation (RAG) service that ingests
 web pages or raw text about brands, indexes them in a vector database, and answers natural-language
