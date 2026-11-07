@@ -1,4 +1,4 @@
-# Brand Q&A Agent
+# 🏢 Brand Q&A Agent | 🤖✨
 
 [![CI](https://github.com/syed-sadain/Brand-Q-A-Agent-/actions/workflows/ci.yml/badge.svg)](https://github.com/syed-sadain/Brand-Q-A-Agent-/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
